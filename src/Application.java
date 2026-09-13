@@ -2,8 +2,8 @@ import java.util.Scanner;
 
 public class Application {
 
-    final int MAX_OPTIONS = 3;
-    final int EXIT_OPTION_NUMBER = 3;
+    final int MAX_OPTIONS = 4;
+    final int EXIT_OPTION_NUMBER = 4;
     Scanner sc;
     Library library;
 
@@ -21,7 +21,8 @@ public class Application {
             System.out.println("please, enter your wanted operation number between the following choices:");
             System.out.println("1. Add Member");
             System.out.println("2. Add Book");
-            System.out.println("3. Exit");
+            System.out.println("3. Borrow Book");
+            System.out.println(EXIT_OPTION_NUMBER + ". Exit");
 
             if (sc.hasNextInt()) {
                 int inp = sc.nextInt();
@@ -49,6 +50,9 @@ public class Application {
                 break;
             case 2:
                 this.addBook();
+                break;
+            case 3:
+                this.borrowBook();
                 break;
             case EXIT_OPTION_NUMBER:
                 this.exitApp();
@@ -88,6 +92,36 @@ public class Application {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void borrowBook() {
+        int bookId = getValidInputId("book");
+        int memberId = getValidInputId("member");
+        this.library.borrow(bookId, memberId);
+    }
+
+    private int getValidInputId(String inputName) {
+        int inp = -1;
+
+        System.out.printf("Enter the ID of the %s.%n", inputName);
+        while (inp < 0) {
+            /*
+             * Handling Bad Input: When the user enters a non-integer, the else block runs.
+             * It prints your error message and calls sc.next() to clear the invalid token
+             * from the scanner buffer so the program can ask again.
+             */
+            if (this.sc.hasNextInt()) {
+                inp = this.sc.nextInt();
+                this.sc.nextLine(); // Clear the leftover newline from buffer
+                if (inp < 0) {
+                    System.out.println("Error: The number must be greater or equal to 0.");
+                }
+            } else {
+                System.out.println("Invalid input, please try again.");
+                this.sc.next();
+            }
+        }
+        return inp;
     }
 
 }

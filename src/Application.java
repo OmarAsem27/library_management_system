@@ -2,7 +2,8 @@ import java.util.Scanner;
 
 public class Application {
 
-    final int MAX_OPTIONS = 2;
+    final int MAX_OPTIONS = 3;
+    final int EXIT_OPTION_NUMBER = 3;
     Scanner sc;
     Library library;
 
@@ -19,14 +20,15 @@ public class Application {
         while (appRunning) {
             System.out.println("please, enter your wanted operation number between the following choices:");
             System.out.println("1. Add Member");
-            System.out.println("2. Exit");
+            System.out.println("2. Add Book");
+            System.out.println("3. Exit");
 
             if (sc.hasNextInt()) {
                 int inp = sc.nextInt();
                 sc.nextLine();
 
                 if (inp >= 1 && inp <= MAX_OPTIONS) {
-                    if (inp == 2) {
+                    if (inp == EXIT_OPTION_NUMBER) {
                         appRunning = false;
                     } else {
                         this.processUserRequest(inp);
@@ -43,9 +45,12 @@ public class Application {
     private void processUserRequest(int input) {
         switch (input) {
             case 1:
-                this.AddMember();
+                this.addMember();
                 break;
             case 2:
+                this.addBook();
+                break;
+            case EXIT_OPTION_NUMBER:
                 this.exitApp();
                 break;
             default:
@@ -53,7 +58,7 @@ public class Application {
         }
     }
 
-    private void AddMember() {
+    private void addMember() {
         System.out.println("please enter the name.");
         String name = this.sc.nextLine();
 
@@ -70,6 +75,19 @@ public class Application {
     private void exitApp() {
         System.out.println("Thank you for using our application.");
         System.exit(0);
+    }
+
+    private void addBook() {
+        System.out.println("please enter the title.");
+        String title = this.sc.nextLine();
+
+        try {
+            this.library.registerBook(title);
+            System.out.println(
+                    "\nBook was added successfully.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

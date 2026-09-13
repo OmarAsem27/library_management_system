@@ -24,4 +24,18 @@ public class Library {
         }
     }
 
+    public void registerBook(String title) throws Exception {
+        try {
+            Book book = new Book(nextBookId, title);
+            this.booksList.add(book);
+            this.nextBookId++;
+
+            for (Book bk : this.booksList) {
+                System.out.printf("Book of id %d: title: %s, status: %s%n", bk.id, bk.title, bk.isAvailable);
+            }
+        } catch (Exception e) {
+            throw new Exception("\nFailed to create a new book: " + e.getMessage());
+        }
+    }
+
 }

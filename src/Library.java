@@ -17,9 +17,6 @@ public class Library {
             this.membersList.add(member);
             this.nextMemberId++;
 
-            for (Member mem : this.membersList) {
-                System.out.printf("Member of id %d: name: %s, status: %s%n", mem.id, mem.name, mem.isActive);
-            }
         } catch (Exception e) {
             throw new Exception("\nFailed to create a new member: " + e.getMessage());
         }
@@ -31,9 +28,6 @@ public class Library {
             this.booksList.add(book);
             this.nextBookId++;
 
-            for (Book bk : this.booksList) {
-                System.out.printf("Book of id %d: title: %s, status: %s%n", bk.id, bk.title, bk.isAvailable);
-            }
         } catch (Exception e) {
             throw new Exception("\nFailed to create a new book: " + e.getMessage());
         }
@@ -53,55 +47,49 @@ public class Library {
                 .orElse(null);
     }
 
-    public void borrow(int bookId, int memberId) {
+    public void borrow(int bookId, int memberId) throws Exception {
         Book book = this.findBookById(bookId);
         Member member = this.findMemberById(memberId);
+        if (book == null || member == null) {
+            throw new Exception("member or book not found");
+        }
         this.createLoan(book, member);
-        System.out.println("BORROWWWWWWW.");
     }
 
-    private void createLoan(Book book, Member member) {
-        // check if the book is available
-        // check if the member allowed to borrow (hasn't exceeded the limit)
-        // check if the member doesn't have an active loan with same book
-        // check if there's any other reason to not create the loan
+    private void createLoan(Book book, Member member) throws Exception {
+        this.hasActiveLoan(book, member);
+        this.exceededLimit(member);
+        // this.bookLoaned(book);
 
-        // boolean hasLoan = this.hasActiveLoan(book, member);
-        // if (!hasLoan) {
-
-        // }
         Loan loan = new Loan(this.nextLoanId, member, book);
         this.loansList.add(loan);
         this.nextLoanId++;
-        for (Loan bk : this.loansList) {
-            System.out.printf("Loan of id %d: member id: %d,book id: %d,started at: %s, ends at: %s, acive: %s,%n",
-                    bk.id,
-                    bk.member.id,
-                    bk.book.id,
-                    bk.startDate,
-                    bk.endDate,
-                    bk.isActive);
-        }
+        book.changeAvailability();
     }
 
     private void hasActiveLoan(Book book, Member member) throws Exception {
         Loan hasLoan = this.loansList.stream()
-                .filter(loan -> loan.member.id == member.id && loan.book.id == book.id)
+                .filter(loan -> loan.member.id == member.id && loan.book.id == book.id && loan.isActive)
                 .findFirst()
                 .orElse(null);
-        if (hasLoan == null) {
+        if (hasLoan != null) {
             throw new Exception("This member has an active loan with the same book.");
         }
     }
 
-    private boolean exceededLimit(Member member) {
-
-        return true;
+    private void exceededLimit(Member member) throws Exception {
+        long loansCount = this.loansList.stream()
+                .filter(loan -> loan.member.id == member.id && loan.isActive)
+                .count();
+        if (loansCount >= MAX_BOOKS_ALLOWED) {
+            throw new Exception("This member has exceeded the loans limit.");
+        }
     }
 
-    private boolean bookLoaned(Book book) {
-
-        return true;
-    }
+    // private void bookLoaned(Book book) throws Exception {
+    //     if (!book.isAvailable) {
+    //         throw new Exception("This book is unavailable now.");
+    //     }
+    // }
 
 }

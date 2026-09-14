@@ -15,4 +15,11 @@ public class Book {
             throw new Exception("The title must be at least 2 characters long.");
         }
     }
+
+    public void changeAvailability() throws Exception {
+        if (!this.isAvailable) {
+            throw new Exception("The book is already unavailable.");
+        }
+        this.isAvailable = false;
+    }
 }

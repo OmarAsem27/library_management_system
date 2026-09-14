@@ -97,7 +97,13 @@ public class Application {
     private void borrowBook() {
         int bookId = getValidInputId("book");
         int memberId = getValidInputId("member");
-        this.library.borrow(bookId, memberId);
+
+        try {
+            this.library.borrow(bookId, memberId);
+            System.out.println("Book borrowed successfully!");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private int getValidInputId(String inputName) {

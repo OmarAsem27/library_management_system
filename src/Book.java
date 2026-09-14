@@ -16,10 +16,18 @@ public class Book {
         }
     }
 
-    public void changeAvailability() throws Exception {
+    public void markUnavailable() throws Exception {
         if (!this.isAvailable) {
-            throw new Exception("The book is already unavailable.");
+            throw new Exception("The book is unavailable.");
         }
         this.isAvailable = false;
     }
+
+    public void markAvailable() throws Exception {
+        if (this.isAvailable) {
+            throw new Exception("The book is already available.");
+        }
+        this.isAvailable = true;
+    }
+
 }

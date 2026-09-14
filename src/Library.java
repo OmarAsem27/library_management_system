@@ -64,7 +64,7 @@ public class Library {
         Loan loan = new Loan(this.nextLoanId, member, book);
         this.loansList.add(loan);
         this.nextLoanId++;
-        book.changeAvailability();
+        book.markUnavailable();
     }
 
     private void hasActiveLoan(Book book, Member member) throws Exception {
@@ -87,9 +87,28 @@ public class Library {
     }
 
     // private void bookLoaned(Book book) throws Exception {
-    //     if (!book.isAvailable) {
-    //         throw new Exception("This book is unavailable now.");
-    //     }
+    // if (!book.isAvailable) {
+    // throw new Exception("This book is unavailable now.");
     // }
+    // }
+
+    public void finishBorrowing(int bookId, int memberId) throws Exception {
+        Book book = this.findBookById(bookId);
+        Member member = this.findMemberById(memberId);
+        if (book == null || member == null) {
+            throw new Exception("member or book not found");
+        }
+        Loan activeLoan = this.loansList.stream()
+                .filter(loan -> loan.member.id == member.id && loan.book.id == book.id && loan.isActive)
+                .findFirst()
+                .orElse(null);
+
+        if (activeLoan == null) {
+            throw new Exception("Loan not found with this informations");
+        }
+
+        activeLoan.terminate();
+        book.markAvailable();
+    }
 
 }

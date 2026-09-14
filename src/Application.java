@@ -2,8 +2,8 @@ import java.util.Scanner;
 
 public class Application {
 
-    final int MAX_OPTIONS = 4;
-    final int EXIT_OPTION_NUMBER = 4;
+    final int MAX_OPTIONS = 5;
+    final int EXIT_OPTION_NUMBER = 5;
     Scanner sc;
     Library library;
 
@@ -22,6 +22,7 @@ public class Application {
             System.out.println("1. Add Member");
             System.out.println("2. Add Book");
             System.out.println("3. Borrow Book");
+            System.out.println("4. Return Book");
             System.out.println(EXIT_OPTION_NUMBER + ". Exit");
 
             if (sc.hasNextInt()) {
@@ -31,9 +32,9 @@ public class Application {
                 if (inp >= 1 && inp <= MAX_OPTIONS) {
                     if (inp == EXIT_OPTION_NUMBER) {
                         appRunning = false;
-                    } else {
-                        this.processUserRequest(inp);
                     }
+
+                    this.processUserRequest(inp);
                     continue;
                 }
             } else {
@@ -53,6 +54,9 @@ public class Application {
                 break;
             case 3:
                 this.borrowBook();
+                break;
+            case 4:
+                this.returnBook();
                 break;
             case EXIT_OPTION_NUMBER:
                 this.exitApp();
@@ -130,4 +134,15 @@ public class Application {
         return inp;
     }
 
+    private void returnBook() {
+        int bookId = getValidInputId("book");
+        int memberId = getValidInputId("member");
+
+        try {
+            this.library.finishBorrowing(bookId, memberId);
+            System.out.println("Book returned successfully!");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 }

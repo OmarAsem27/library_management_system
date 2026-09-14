@@ -13,9 +13,18 @@ public class Loan {
         this.id = id;
         this.member = member;
         this.book = book;
-        // this.startDate = startDate;
-        // this.endDate = endDate;
-        // this.isActive = isActive;
+    }
+
+    public void terminate() throws Exception {
+        if (!this.isActive) {
+            throw new Exception("This loan is already inactive.");
+        }
+
+        if (this.endDate != null) {
+            throw new Exception("This loan has already ended.");
+        }
+        this.endDate = LocalDate.now();
+        this.isActive = false;
     }
 
 }

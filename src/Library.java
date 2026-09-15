@@ -92,7 +92,7 @@ public class Library {
     // }
     // }
 
-    public void finishBorrowing(int bookId, int memberId) throws Exception {
+    public void returnBook(int bookId, int memberId) throws Exception {
         Book book = this.findBookById(bookId);
         Member member = this.findMemberById(memberId);
         if (book == null || member == null) {
@@ -111,4 +111,9 @@ public class Library {
         book.markAvailable();
     }
 
+    public List<Loan> getActiveLoans() {
+        return this.loansList.stream()
+                .filter(loan -> loan.isActive)
+                .toList(); // Converts Stream<Loan> to an unmodifiable List<Loan>
+    }
 }

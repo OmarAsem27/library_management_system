@@ -21,17 +21,20 @@ A console-based Java application for managing library operations, members, books
 ## 🏗️ Responsibility Model
 
 ### Application
+
 - Show menu
 - Collect input
 - Request operations
 - Present results
 
 ### Member
+
 - Maintain a valid state
 - Maintain knowledge of its loans
 - Provide information about its borrowing activity
 
 ### Library
+
 - Manage books
 - Manage members
 - Manage loans
@@ -43,12 +46,14 @@ A console-based Java application for managing library operations, members, books
 - Enforce library-level policies
 
 ### Book
+
 - Maintain a valid state
 - Protect availability rules
 - Become borrowed
 - Become available
 
 ### Loan
+
 - Represent the borrowing relationship
 - Maintain loan lifecycle state
 - Know whether it is active or completed
@@ -61,16 +66,19 @@ A console-based Java application for managing library operations, members, books
 ## 🏷️ Objects Properties
 
 ### Member
+
 - `id`
 - `name`
 - `active/inactive`
 
 ### Book
+
 - `id`
 - `title`
 - `available/unavailable`
 
 ### Loan
+
 - `member`
 - `book`
 - `startDate`
@@ -82,18 +90,22 @@ A console-based Java application for managing library operations, members, books
 ## 🔗 Relationship Model
 
 ### Library
+
 - Owns Members
 - Owns Books
 - Owns Loans
 
 ### Member
+
 - References Loans
 
 ### Loan
+
 - References Member
 - References Book
 
 ### Book
+
 - Maintains its own state
 
 ---
@@ -204,3 +216,29 @@ A console-based Java application for managing library operations, members, books
 4. Library locates all active Loans.
 5. Library communicates the result.
 6. Application presents the result.
+
+### 6. Deactivate Member use case
+
+1. Application shows menu.
+2. User chooses Deactivate Member.
+3. Application collects Member ID.
+4. Application requests deactivation from Library.
+5. Library locates the Member.
+6. Library verifies the Member has no active Loans.
+7. If active Loans exist → reject.
+8. Library asks the Member to deactivate itself.
+9. Library communicates the result.
+10. Application presents the result.
+
+### 7. Retire Book use case
+
+1. Application shows menu.
+2. User chooses Retire Book.
+3. Application collects Book ID.
+4. Application requests to remove book from Library.
+5. Library locates the Book.
+6. Library verifies the Book has no active Loans.
+7. If active Loans exist → reject.
+8. Library asks the Book to remove itself.
+9. Library communicates the result.
+10. Application presents the result.

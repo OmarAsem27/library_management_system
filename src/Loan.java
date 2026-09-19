@@ -9,6 +9,8 @@ public class Loan {
     LocalDate endDate = null;
     boolean isActive = true;
 
+    // aggregation (weaker form of composition)
+    // (weak "has-a" relationship in object-oriented programming)
     public Loan(int id, Member member, Book book) {
         this.id = id;
         this.member = member;

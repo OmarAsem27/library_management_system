@@ -3,8 +3,7 @@ import java.util.Scanner;
 
 public class Application {
 
-    final int MAX_OPTIONS = 6;
-    final int EXIT_OPTION_NUMBER = 6;
+    final int MAX_OPTIONS = 8;
     Scanner sc;
     Library library;
 
@@ -24,15 +23,17 @@ public class Application {
             System.out.println("2. Add Book");
             System.out.println("3. Borrow Book");
             System.out.println("4. Return Book");
-            System.out.println("4. Show Active Loans");
-            System.out.println(EXIT_OPTION_NUMBER + ". Exit");
+            System.out.println("5. Show Active Loans");
+            System.out.println("6. Deactivate Member");
+            System.out.println("7. Retire Book");
+            System.out.println(MAX_OPTIONS + ". Exit");
 
             if (sc.hasNextInt()) {
                 int inp = sc.nextInt();
                 sc.nextLine();
 
                 if (inp >= 1 && inp <= MAX_OPTIONS) {
-                    if (inp == EXIT_OPTION_NUMBER) {
+                    if (inp == MAX_OPTIONS) {
                         appRunning = false;
                     }
 
@@ -63,7 +64,13 @@ public class Application {
             case 5:
                 this.printActiveLoans();
                 break;
-            case EXIT_OPTION_NUMBER:
+            case 6:
+                this.endMembership();
+                break;
+            case 7:
+                this.removeBook();
+                break;
+            case MAX_OPTIONS:
                 this.exitApp();
                 break;
             default:
@@ -158,13 +165,36 @@ public class Application {
             System.out.println("No active loans found.");
         } else {
             for (int i = 0; i < activeLoans.size(); i++) {
-                System.out.printf("Loan number: %d, id: %d, book id: %d, member id: %d, startDate: %s, endDate: %s.%n", i,
+                System.out.printf("Loan number: %d, id: %d, book id: %d, member id: %d, startDate: %s, endDate: %s.%n",
+                        i,
                         activeLoans.get(i).id,
                         activeLoans.get(i).book.id,
                         activeLoans.get(i).member.id,
                         activeLoans.get(i).startDate,
                         activeLoans.get(i).endDate);
             }
+        }
+    }
+
+    private void endMembership() {
+        int memberId = getValidInputId("member");
+
+        try {
+            this.library.deactivateMember(memberId);
+            System.out.println("The member deactivated successfully!");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void removeBook() {
+        int memberId = getValidInputId("book");
+
+        try {
+            this.library.retireBook(memberId);
+            System.out.println("The book removed successfully!");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

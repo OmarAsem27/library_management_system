@@ -96,7 +96,7 @@ public class Library {
         Book book = this.findBookById(bookId);
         Member member = this.findMemberById(memberId);
         if (book == null || member == null) {
-            throw new Exception("member or book not found");
+            throw new Exception("Member or book not found");
         }
         Loan activeLoan = this.loansList.stream()
                 .filter(loan -> loan.member.id == member.id && loan.book.id == book.id && loan.isActive)
@@ -115,5 +115,42 @@ public class Library {
         return this.loansList.stream()
                 .filter(loan -> loan.isActive)
                 .toList(); // Converts Stream<Loan> to an unmodifiable List<Loan>
+    }
+
+    public void deactivateMember(int memberId) throws Exception {
+        Member member = this.findMemberById(memberId);
+        if (member == null) {
+            throw new Exception("Member not found");
+        }
+
+        Loan activeLoan = this.loansList.stream()
+                .filter(loan -> loan.member.id == member.id && loan.isActive)
+                .findFirst()
+                .orElse(null);
+
+        if (activeLoan != null) {
+            throw new Exception("Can not deactivate member while having active loans.");
+        }
+
+        member.markInactive();
+    }
+
+    public void retireBook(int bookId) throws Exception {
+        Book book = this.findBookById(bookId);
+
+        if (book == null) {
+            throw new Exception("Book not found");
+        }
+
+        Loan activeLoan = this.loansList.stream()
+                .filter(loan -> loan.book.id == book.id && loan.isActive)
+                .findFirst()
+                .orElse(null);
+
+        if (activeLoan != null) {
+            throw new Exception("Can not retire book while having active loans.");
+        }
+
+        book.markUnavailable();
     }
 }

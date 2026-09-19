@@ -16,4 +16,10 @@ public class Member {
         }
     }
 
+    public void markInactive() throws Exception {
+        if (!this.isActive) {
+            throw new Exception("This member is already inactive.");
+        }
+        this.isActive = false;
+    }
 }
